@@ -1,24 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { I18n } from 'i18n-js';
-import { getLocales } from 'expo-localization';
-
-const i18n = new I18n({
-    en:{welcome: 'hello' },
-    ja:{welcome: "新しい出発を待っています！"}});
-
-const deviceLanguage = getLocales()[0].languageCode;
-i18n.locale = deviceLanguage;
-
-console.log(i18n.t('welcome'));
-
-
-
+import { useTransletion } from './src/use-translation';
 
 export default function App() {
+  const {locale,t} = useTransletion();
+  if (locale === null) return null;
+
   return (
     <View style={styles.container}>
-      <Text>{deviceLanguage}</Text>
+      <Text>{t("cookie_2")}</Text>
       <StatusBar style="auto" />
     </View>
   );
