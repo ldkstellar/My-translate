@@ -6,10 +6,14 @@ import { useTransletion } from './src/use-translation';
 import * as SplashScreen from 'expo-splash-screen';
 import LoadingView from './src/LoadingView';
 import LottieView from "lottie-react-native"
+import {useFonts} from 'expo-font'
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    'RIDIBatang': require('./assets/fonts/RIDIBatang.otf')
+  });
 
   const {format,setLocale,locale,t} = useTransletion();
   const {cookieKey} = useCookie();
@@ -29,10 +33,10 @@ export default function App() {
  
   
   useEffect(()=>{
-    if (locale!==null) {
+    if (locale!==null && fontsLoaded) {
       SplashScreen.hideAsync();
     }
-  },[locale]);
+  },[locale,fontsLoaded]);
 
   if (!isLoaded) return <LoadingView />;
   
