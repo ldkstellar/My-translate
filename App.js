@@ -1,23 +1,47 @@
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Button from './src/Button';
 import { useCookie } from './src/lang/use-cookie';
 import { useTransletion } from './src/use-translation';
+import * as SplashScreen from 'expo-splash-screen';
+import LoadingView from './src/LoadingView';
+
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const {setLocale,locale,t} = useTransletion();
+
+  const {format,setLocale,locale,t} = useTransletion();
   const {cookieKey} = useCookie();
-  if (locale === null) return null;
+  const [isLoaded, setIsLoad] = useState(false);
+  const y = new Date().getFullYear();
+  const m  = new Date().getMonth()+1; //month는 0~ 11까지  리턴하는 값이다. 
+  const d  =  new Date().getDate();
+  const todayText  = format(t('today_is'),y,m,d);
+  //if (locale === null || cookieKey === "") return null;
+  
+  useEffect(()=>{
+    if ( cookieKey !== "") {
+      setIsLoad(true);
+    }
+  },[cookieKey]); // 종속성에 대해서 찾아보기
  
+  
+  useEffect(()=>{
+    if (locale!==null) {
+      SplashScreen.hideAsync();
+    }
+  },[locale]);
+
+  if (!isLoaded) return <LoadingView />;
   
 
 
   return (
     <View style={styles.container}>
+      <Text>{todayText}</Text>
       <Text>{t(cookieKey)}</Text>
       <View style={styles.buttonContainer}>
-        
         <Button
           onPress = {()=>setLocale("ko")}
           isSelected ={locale === "ko"}

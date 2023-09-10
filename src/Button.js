@@ -3,10 +3,11 @@ import { StyleSheet, TouchableOpacity ,Text } from "react-native"
 export default (props) =>{
     const {onPress,isSelected,text} = props;
     return(
-        <TouchableOpacity onPress={onPress} style={[
-            styles.container,
+        <TouchableOpacity onPress={onPress} style={
+            
+            [styles.container,
             isSelected ? styles.selectedButton:styles.notSelectedButton]}>
-            <Text>{text}</Text>
+            <Text style={styles.buttonText}>{text}</Text>
 
         </TouchableOpacity>
     )
@@ -15,8 +16,13 @@ export default (props) =>{
 
 const styles = StyleSheet.create({
     container:{
-        flex:1,
+
+        
         backgroundColor:'#ffffff80',// 숫자는 opacity이다.
+        justifyContent:"center",
+        alignItems:"center",
+        height:30,
+        width:80,
         borderWidth:2,
         borderRadius:15,
         paddingHorizontal:10,
@@ -24,7 +30,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 5,
     },
     selectedButton:{borderColor:"white"},
-
     notSelectedButton:{borderColor:"transparent"},
     buttonText:{
         color:"white",

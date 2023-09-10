@@ -2,6 +2,8 @@ import {getLocales} from 'expo-localization';
 import {I18n} from 'i18n-js';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {format} from 'react-string-format';
+
 const ko = require('./lang/lang.ko.json');
 const en = require('./lang/lang.en.json');
 const ja = require('./lang/lang.ja.json');
@@ -13,6 +15,9 @@ const i18n = new I18n({
     ja,
     zh,
 });
+
+i18n.enableFallback = true;
+i18n.defaultLocale = "ko";
 const deviceLanguage = getLocales()[0].languageCode;
 
 export const useTransletion = () =>{
@@ -21,9 +26,10 @@ export const useTransletion = () =>{
         _setLocale(v);
         AsyncStorage.setItem(LOCALE_KEY,v);
     };
+
     const init = async()=>{
         const fs = await AsyncStorage.getItem(LOCALE_KEY);
-        console.log(fs);
+        // console.log(fs);
         if (fs !== null){//null이아니면
             _setLocale(fs);// fs값을 넣고
         }
@@ -35,8 +41,9 @@ export const useTransletion = () =>{
     }
     
     useEffect(()=>{
-        init();
-        //_setLocale(deviceLanguage);//의존성 배열을 사용함으로써 랜더링 초기시 한번만 실행하도록 한다.
+       init();
+        
+        // _setLocale(deviceLanguage);//의존성 배열을 사용함으로써 랜더링 초기시 한번만 실행하도록 한다.
        // _setLocale("ko");
     },[]);
     
@@ -44,7 +51,7 @@ export const useTransletion = () =>{
         setLocale,
         locale,
         t: (scope) => i18n.t(scope,{locale}),// 스코프로 활용한 메소드 형식으로 해야지 가능하다. locale의 설정으로 들어간다.json을 변경한다.
-        
+        format,        
 
     }
 }
